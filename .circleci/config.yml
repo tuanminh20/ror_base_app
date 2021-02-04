@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/ror_base_app
+    docker:
+      - image: circleci/ruby:2.7.1
+        environment:
+          RAILS_ENV: test
+    steps:
+      - checkout
+
+      # Restore Cached Dependencies
+      - type: cache-restore
+        name: Restore bundle cache
+        key: ror_base_app-{{ checksum "Gemfile.lock" }}
+
+      # Bundle install dependencies
+      - run: bin/setup
+
+      # Cache Dependencies
+      - type: cache-save
+        name: Store bundle cache
+        key: ror_base_app-{{ checksum "Gemfile.lock" }}
+        paths:
+          - vendor/bundle
+
+      # Run the tests
+      - run: COVERAGE=true bin/rake
