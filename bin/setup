@@ -17,9 +17,6 @@ else
   bundle check || bundle install --path vendor/bundle
 fi
 
-# Install JavaScript dependencies
-bin/yarn
-
 # Set up database and add any development seed data
 bin/rails dev:prime
 
